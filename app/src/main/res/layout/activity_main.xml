@@ -11,12 +11,12 @@
         android:id="@+id/killButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mysteryButton"
         android:layout_alignParentStart="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="63dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="241dp"
         android:text="KILL" />
 
     <Button
@@ -31,14 +31,14 @@
         android:layout_gravity="center"
         android:text="UNKILL" />
 
-    <Button
-        android:id="@+id/mysteryButton"
+    <ImageView
+        android:id="@+id/appSelection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="161dp"
-        android:layout_gravity="center"
-        android:text="Mystery Button - What could it be :o" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        app:srcCompat="@android:drawable/ic_menu_preferences" />
 
 </RelativeLayout>

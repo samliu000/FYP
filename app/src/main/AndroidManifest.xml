@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FYP">
-        <activity android:name=".CashOutPage"></activity>
+        <activity android:name=".AppSelect"></activity>
+        <activity android:name=".CashOutPage" />
         <activity android:name=".CashInPage" />
         <activity android:name=".MainActivity">
             <intent-filter>

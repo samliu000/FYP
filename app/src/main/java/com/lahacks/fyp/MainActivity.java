@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     Button killButton;
     Button unkillButton;
     Button mysteryButton;
+    ImageView appSelection;
     private ComponentName compName;
 
     @Override
@@ -45,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
         killButton = findViewById(R.id.killButton);
         unkillButton = findViewById(R.id.unkillButton);
         mysteryButton = findViewById(R.id.mysteryButton);
-
-        // print list of apps
-        getAllApplications();
+        appSelection = findViewById(R.id.appSelection);
 
         // apps to ban/unban
         String[] listOfPackages = {"com.google.android.youtube", "com.zhiliaoapp.musically"};
@@ -57,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "You fool! It does nothing", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // move to app selection
+        appSelection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AppSelect.class);
+                startActivity(intent);
             }
         });
 
@@ -120,24 +129,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    /**
-     * Get all the applications on the phone
-     * @return
-     */
-    public List<ApplicationInfo> getAllApplications() {
-        final PackageManager pm = getPackageManager();
-        //get a list of installed apps.
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-
-        // print out relevant info about each application
-        for (ApplicationInfo packageInfo : packages) {
-            Log.d(TAG, "Installed package :" + packageInfo.packageName);
-            Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
-            Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
-        }
-
-        return packages;
     }
 }
