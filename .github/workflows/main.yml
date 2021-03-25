@@ -1,8 +1,6 @@
 name: Gif Comment
 on:
   pull_request:
-  issues:
-    types: [opened]
   
 jobs:
   comment:
