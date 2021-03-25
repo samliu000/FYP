@@ -1,7 +1,7 @@
 name: Gif Comment
 on:
   pull_request:
-  
+  workflow_dispatch:
 jobs:
   comment:
     
