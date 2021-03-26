@@ -9,9 +9,9 @@ public class App {
     Drawable icon;
 
     public App(String name, String packageName, Drawable icon) {
-            this.name = name;
-            this.packageName = packageName;
-            this.icon = icon;
+        this.name = name;
+        this.packageName = packageName;
+        this.icon = icon;
     }
 
     public String getName() {
