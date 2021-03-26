@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="180dp"
+    android:foregroundTint="#352424"
+    android:orientation="vertical"
+    android:padding="4dp">
 
     <ImageView
         android:id="@+id/appIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:contentDescription="Icon of the app"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/appName"
-        android:layout_width="50dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/appIcon"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="7dp"
-        android:textSize="14sp"
-        android:transitionName="transTitle"
-        tools:text="Tik Tok" />
-
-</RelativeLayout>
+        android:gravity="center"
+        tools:text="App Name" />
+</LinearLayout>
