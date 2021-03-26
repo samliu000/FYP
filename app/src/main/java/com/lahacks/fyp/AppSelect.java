@@ -76,7 +76,7 @@ public class AppSelect extends AppCompatActivity {
 
 
 
-        return packages;
+        return allApps;
     }
 
 }

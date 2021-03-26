@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     DeviceAdminReceiver dar;
     Button killButton;
     Button unkillButton;
-    Button mysteryButton;
     ImageView appSelection;
     private ComponentName compName;
 
@@ -46,19 +45,10 @@ public class MainActivity extends AppCompatActivity {
         // initialize buttons
         killButton = findViewById(R.id.killButton);
         unkillButton = findViewById(R.id.unkillButton);
-        mysteryButton = findViewById(R.id.mysteryButton);
         appSelection = findViewById(R.id.appSelection);
 
         // apps to ban/unban
         String[] listOfPackages = {"com.google.android.youtube", "com.zhiliaoapp.musically"};
-
-        // trap
-        mysteryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "You fool! It does nothing", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         // move to app selection
         appSelection.setOnClickListener(new View.OnClickListener() {
