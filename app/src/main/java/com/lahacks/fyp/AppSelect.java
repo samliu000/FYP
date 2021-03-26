@@ -60,7 +60,7 @@ public class AppSelect extends AppCompatActivity {
 
 
             String pkg = packageInfo.packageName;
-            String appName = this.getPackageManager().getApplicationLabel(pkg);
+            String appName = this.getPackageManager().getApplicationLabel(packageInfo).toString();
 
             // get icon
             Drawable icon;
