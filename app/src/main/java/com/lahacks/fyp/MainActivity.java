@@ -2,7 +2,13 @@ package com.lahacks.fyp;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.admin.DeviceAdminReceiver;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -23,6 +29,8 @@ import java.util.List;
 import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
+    Button btNotification;
+
     public static final int RESULT_ENABLE = 11;
     public static final String TAG = "MainActivity";
     DevicePolicyManager dpm;
@@ -37,6 +45,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        createNotifiationChannel();
+
+        btNotification = findViewById(R.id.bt_notification);
+
+        btNotification.setOnClickListener(view -> {
+            Toast.makeText(this, "Reminder Set!", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+            long timeAtButtonClick = System.currentTimeMillis();
+            long tenSecondsInMillis = 1000 * 10;
+
+            //RTC_WAKEUP wakes up the device to fire the pending intent at the specified time
+            alarmManager.set(AlarmManager.RTC_WAKEUP,
+                    timeAtButtonClick +tenSecondsInMillis,
+                    pendingIntent);
+
+        });
 
         // initialize device policy manager
         dpm = (DevicePolicyManager) this.getSystemService(Context.DEVICE_POLICY_SERVICE);
@@ -130,5 +160,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void createNotifiationChannel(){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            CharSequence name = "MenubitReminderChannel";
+            String description = "Channel for Lemubit Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyLemubit", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
