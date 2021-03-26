@@ -25,7 +25,6 @@ public class CashOutPage extends AppCompatActivity {
     private boolean timerRunning;
     private long timeLeftInMillis;
     private long endTime;
-    private double startMinutes;
     private long millisLeft;
 
     @Override
@@ -48,29 +47,28 @@ public class CashOutPage extends AppCompatActivity {
             }
         });
 
-        //Setting time
-        // possibly where to add the additional minutes achieved?
-        startMinutes = 2;
-        millisLeft = (long) startMinutes * 60000; //turns minutes to milliseconds
-
         button_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                /*if(minutesAdded){
-                    newMins = whatever new minutes was added
+                /* // Potential code for the implementation of new minutes
+                if(newMins != 0) {
                     oldMillisLeft = millisLeft;
                     millisLeft = (newMins*60000) + oldMillisLeft;
-                }*/
-
-                if (millisLeft == 0) {
+                } else {
                     Toast noMin = Toast.makeText(CashOutPage.this, "You have no minutes!", Toast.LENGTH_SHORT);
                     noMin.setGravity(Gravity.CENTER, 0, 0);
                     noMin.show();
-                    return;
+                }
+                */
 
-                    /*
-                    //FOR TESTING...
+                if (millisLeft == 0) {
+                    /*Toast noMin = Toast.makeText(CashOutPage.this, "You have no minutes!", Toast.LENGTH_SHORT);
+                    noMin.setGravity(Gravity.CENTER, 0, 0);
+                    noMin.show();
+                    return;*/
+
+                    /* FOR TESTING...
                     long newMins = 2;
                     millisLeft = (newMins * 60000);
                     */
@@ -80,7 +78,7 @@ public class CashOutPage extends AppCompatActivity {
         });
     }
 
-    //Setting time of timer...
+    //setting time of timer seen by user...
     private void setTime(long milliseconds) {
         startTimeInMillis = milliseconds;
         resetTimer();
@@ -93,13 +91,13 @@ public class CashOutPage extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeLeftInMillis = millisUntilFinished;
-                millisLeft = timeLeftInMillis; //updating the start time for refresh
+                millisLeft = timeLeftInMillis; // updating the start time every tick - this prevents users from getting more mins if they don't have new minutes added
                 updateCountDownText();
             }
             @Override
             public void onFinish() {
                 timerRunning = false;
-                millisLeft = 0; //NEW
+                millisLeft = 0; // sets millisLeft to 0, since time has ran out
                 updateButtons();
             }
         }.start();
@@ -157,7 +155,7 @@ public class CashOutPage extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putLong("millisLeft", millisLeft); //NEW - saves millisLeft..
+        editor.putLong("millisLeft", millisLeft); // saves millisLeft..
         editor.putLong("timeLeft", timeLeftInMillis);
         editor.putBoolean("timerRunning", timerRunning);
         editor.putLong("endTime", endTime);
@@ -168,14 +166,15 @@ public class CashOutPage extends AppCompatActivity {
             countdown_timer.cancel();
         }
     }
+
     @Override
     protected void onStart() {
         super.onStart();
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
 
-        timeLeftInMillis = prefs.getLong("timeLeft", startTimeInMillis); //default when app is started...
-        millisLeft = prefs.getLong("millisLeft", timeLeftInMillis); //NEWWWW
+        timeLeftInMillis = prefs.getLong("timeLeft", startTimeInMillis);
+        millisLeft = prefs.getLong("millisLeft", timeLeftInMillis);
         timerRunning = prefs.getBoolean("timerRunning", false);
 
         updateCountDownText();
