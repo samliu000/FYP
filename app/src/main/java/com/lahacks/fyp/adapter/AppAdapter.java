@@ -1,48 +1,42 @@
 package com.lahacks.fyp.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lahacks.fyp.R;
 import com.lahacks.fyp.models.App;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder>{
 
     Context context;
     List<App> apps;
-    List<String> selectedApps;
+    Set<String> selectedApps;
 
     public AppAdapter(Context context, List<App> apps) {
         this.context = context;
         this.apps = apps;
-        selectedApps = new ArrayList<>();
+        selectedApps = new HashSet<>();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d("MovieAdapter", "onCreateViewHolder");
-        View movieView = LayoutInflater.from(context).inflate(R.layout.item_app1, parent, false);
+        View movieView = LayoutInflater.from(context).inflate(R.layout.item_app, parent, false);
         return new ViewHolder(movieView);
     }
 
@@ -75,6 +69,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder>{
 
         public void bind(final App app) {
 
+            // check if item is selected
+            if(selectedApps.contains(app.getName())) {
+                container.setBackgroundColor(Color.parseColor("#AFDCFF"));
+            }
+
             appName.setText(app.getName());
             appIcon.setImageDrawable(app.getIcon());
 
@@ -83,9 +82,13 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder>{
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("AppAdapter", "Changing background");
-                    container.setBackgroundColor(Color.parseColor("#AFDCFF"));
-                    selectedApps.add(appName.getText().toString());
+                    if(selectedApps.contains(app.getName())) {
+                        container.setBackgroundColor(0x00000000);
+                        selectedApps.remove(appName.getText().toString());
+                    } else {
+                        container.setBackgroundColor(Color.parseColor("#AFDCFF"));
+                        selectedApps.add(appName.getText().toString());
+                    }
                 }
             });
 

@@ -6,48 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
-    <Button
-        android:id="@+id/killButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:layout_marginStart="156dp"
-        android:layout_marginTop="241dp"
-        android:text="KILL" />
-
-    <Button
-        android:id="@+id/unkillButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/killButton"
-        android:layout_alignParentEnd="true"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="51dp"
-        android:layout_marginEnd="149dp"
-        android:layout_gravity="center"
-        android:text="UNKILL" />
-
-    <ImageView
-        android:id="@+id/appSelection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        app:srcCompat="@android:drawable/ic_menu_preferences" />
-
     <Button
         android:id="@+id/cashOutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/unkillButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="55dp"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="310dp"
         android:text="Cash Out" />
 
     <Button
