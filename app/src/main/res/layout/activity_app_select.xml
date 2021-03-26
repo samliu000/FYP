@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:text="Pick the apps you want to ban"
         android:textColor="#685656"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:gravity="center"/>
 
     <Button
         android:id="@+id/saveButton"

@@ -1,13 +1,22 @@
 package com.lahacks.fyp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.admin.DeviceAdminReceiver;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +24,7 @@ import java.util.Locale;
 
 
 public class CashOutPage extends AppCompatActivity {
-
+    public static final String TAG = "CashOutPage";
     private TextView text_view_countdown;
     private Button button_start_pause;
     private Button button_refresh;
@@ -27,14 +36,107 @@ public class CashOutPage extends AppCompatActivity {
     private long endTime;
     private long millisLeft;
 
+    // app suspension declarations
+    DevicePolicyManager dpm;
+    DeviceAdminReceiver dar;
+    Button killButton;
+    Button unkillButton;
+    private ComponentName compName;
+    ImageView appSelection;
+    public static final int RESULT_ENABLE = 11;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cash_out_page);
 
+        // attaching views to timer stuff
         text_view_countdown = findViewById(R.id.text_view_countdown);
         button_start_pause = findViewById(R.id.button_start_pause);
         button_refresh = findViewById(R.id.button_refresh);
+
+        // initialize device policy manager
+        dpm = (DevicePolicyManager) this.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        dar = new DeviceAdminReceiver();
+        compName = new ComponentName(this, MyAdmin.class);
+
+        // initialize buttons
+        killButton = findViewById(R.id.killButton);
+        unkillButton = findViewById(R.id.unkillButton);
+        appSelection = findViewById(R.id.appSelection);
+
+        // apps to ban/unban
+        String[] listOfPackages = {"com.google.android.youtube", "com.zhiliaoapp.musically"};
+
+        // move to app selection
+        appSelection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CashOutPage.this, AppSelect.class);
+                startActivity(intent);
+            }
+        });
+
+        // logic for the killButton
+        killButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                boolean active = dpm.isAdminActive(compName);
+
+                // kill tik tok!
+                if (active) {
+                    try {
+                        // suspend package
+                        dpm.setPackagesSuspended(compName, listOfPackages, true);
+                        Toast.makeText(CashOutPage.this, "Apps Successfully Blocked", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Log.d(TAG, "Security Exception " + e);
+                    }
+                }
+
+                // ask for admin privilege
+                else {
+
+                    // create intent to go to page where you ask for admin permission
+                    Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                    intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, compName);
+                    intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need " +
+                            "this permission to block apps");
+                    startActivityForResult(intent, RESULT_ENABLE);
+                }
+            }
+        });
+
+        unkillButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                boolean active = dpm.isAdminActive(compName);
+
+                // unkill tik tok!
+                if (active) {
+                    try {
+                        // suspend package
+                        dpm.setPackagesSuspended(compName, listOfPackages, false);
+                        Toast.makeText(CashOutPage.this, "Apps Successfully Unblocked", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Log.d(TAG, "Security Exception " + e);
+                    }
+                }
+
+                // ask for admin privilege
+                else {
+
+                    // create intent to go to page where you ask for admin permission
+                    Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                    intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, compName);
+                    intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need " +
+                            "this permission to block apps");
+                    startActivityForResult(intent, RESULT_ENABLE);
+                }
+            }
+        });
 
         button_start_pause.setOnClickListener(new View.OnClickListener() {
             @Override
