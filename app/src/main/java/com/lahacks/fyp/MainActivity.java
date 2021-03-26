@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     Button killButton;
     Button unkillButton;
     Button cashOutButton;
+    Button cashInButton;
     ImageView appSelection;
     private ComponentName compName;
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         unkillButton = findViewById(R.id.unkillButton);
         appSelection = findViewById(R.id.appSelection);
         cashOutButton = findViewById(R.id.cashOutButton);
+        cashInButton = findViewById(R.id.cashInButton);
 
         // apps to ban/unban
         String[] listOfPackages = {"com.google.android.youtube", "com.zhiliaoapp.musically"};
@@ -126,6 +128,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CashOutPage.class);
+                startActivity(intent);
+            }
+        });
+
+        cashInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CashInPage.class);
                 startActivity(intent);
             }
         });
