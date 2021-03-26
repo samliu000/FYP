@@ -14,9 +14,9 @@ public class CashInPage extends AppCompatActivity {
     private Button waterButton;
     private Button prodButton;
     private Button activityButton;
-    private Button submitButton; //newwww
+    private Button submitButton;
 
-    private int newMins; //This will accumulate the minutes added by the user with each button
+    private int newMins; //This accumulates the minutes added by the user with each button
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,9 @@ public class CashInPage extends AppCompatActivity {
         waterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Testing purposes
                 Toast.makeText(CashInPage.this, "Water", Toast.LENGTH_SHORT).show();
-                //New
+                //adds 1 minute to newMins - temporary until user input is coded
                 newMins += 1;
                 cashOutIntent.putExtra("newMins", newMins);
             }
@@ -44,8 +45,9 @@ public class CashInPage extends AppCompatActivity {
         prodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Testing purposes
                 Toast.makeText(CashInPage.this, "Productivity", Toast.LENGTH_SHORT).show();
-                //New
+                //adds 5 minutes to newMins - temporary until user input is coded
                 newMins += 5;
                 cashOutIntent.putExtra("newMins", newMins);
             }
@@ -54,8 +56,9 @@ public class CashInPage extends AppCompatActivity {
         activityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Testing purposes
                 Toast.makeText(CashInPage.this, "Acitvity", Toast.LENGTH_SHORT).show();
-                //New
+                //adds 10 minutes to newMins - temporary until user input is coded
                 newMins += 10;
                 cashOutIntent.putExtra("newMins", newMins);
             }

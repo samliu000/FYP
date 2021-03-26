@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
-
 public class CashOutPage extends AppCompatActivity {
     public static final String TAG = "CashOutPage";
     private TextView text_view_countdown;
@@ -140,7 +139,7 @@ public class CashOutPage extends AppCompatActivity {
             }
         });
 
-        //
+        //starts or pauses the timer
         button_start_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,7 +151,7 @@ public class CashOutPage extends AppCompatActivity {
             }
         });
 
-        //newwww
+        //this is for the adding new minutes logic
         Intent intent = getIntent();
         newMinsAdded = (long) intent.getIntExtra("newMins", 0);
 
@@ -160,7 +159,7 @@ public class CashOutPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //NEWWWW
+                //adds new minutes to the current timer
                 if (newMinsAdded != 0) {
                     oldMillisLeft = millisLeft;
                     millisLeft = (newMinsAdded*60000) + oldMillisLeft;
@@ -216,6 +215,7 @@ public class CashOutPage extends AppCompatActivity {
         updateButtons();
     }
 
+    //updates button texts or hides buttons based on whether the timer is running
     private void updateButtons() {
         if(timerRunning) {
             button_start_pause.setText("Pause");
