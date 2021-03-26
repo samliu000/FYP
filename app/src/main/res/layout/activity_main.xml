@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="204dp"
-        android:text="CASH IN" />
+        android:layout_marginTop="144dp"
+        android:text="Cash In" />
 
 </RelativeLayout>

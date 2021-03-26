@@ -35,6 +35,8 @@ public class CashOutPage extends AppCompatActivity {
     private long timeLeftInMillis;
     private long endTime;
     private long millisLeft;
+    private long oldMillisLeft;
+    private long newMinsAdded;
 
     // app suspension declarations
     DevicePolicyManager dpm;
@@ -138,6 +140,7 @@ public class CashOutPage extends AppCompatActivity {
             }
         });
 
+        //
         button_start_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,32 +152,25 @@ public class CashOutPage extends AppCompatActivity {
             }
         });
 
+        //newwww
+        Intent intent = getIntent();
+        newMinsAdded = (long) intent.getIntExtra("newMins", 0);
+
         button_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                /* // Potential code for the implementation of new minutes
-                if(newMins != 0) {
+                //NEWWWW
+                if (newMinsAdded != 0) {
                     oldMillisLeft = millisLeft;
-                    millisLeft = (newMins*60000) + oldMillisLeft;
-                } else {
-                    Toast noMin = Toast.makeText(CashOutPage.this, "You have no minutes!", Toast.LENGTH_SHORT);
+                    millisLeft = (newMinsAdded*60000) + oldMillisLeft;
+                    newMinsAdded = 0;
+                } else if (newMinsAdded == 0) {
+                    Toast noMin = Toast.makeText(CashOutPage.this, "You have no minutes to cash out!", Toast.LENGTH_SHORT);
                     noMin.setGravity(Gravity.CENTER, 0, 0);
                     noMin.show();
                 }
-                */
 
-                if (millisLeft == 0) {
-                    /*Toast noMin = Toast.makeText(CashOutPage.this, "You have no minutes!", Toast.LENGTH_SHORT);
-                    noMin.setGravity(Gravity.CENTER, 0, 0);
-                    noMin.show();
-                    return;*/
-
-                    /* FOR TESTING...
-                    long newMins = 2;
-                    millisLeft = (newMins * 60000);
-                    */
-                }
                 setTime(millisLeft);
             }
         });
