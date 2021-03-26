@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     DeviceAdminReceiver dar;
     Button killButton;
     Button unkillButton;
+    Button cashOutButton;
     ImageView appSelection;
     private ComponentName compName;
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         killButton = findViewById(R.id.killButton);
         unkillButton = findViewById(R.id.unkillButton);
         appSelection = findViewById(R.id.appSelection);
+        cashOutButton = findViewById(R.id.cashOutButton);
 
         // apps to ban/unban
         String[] listOfPackages = {"com.google.android.youtube", "com.zhiliaoapp.musically"};
@@ -119,5 +121,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        cashOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CashOutPage.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }
