@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".CashOutPage">
 
+    <ImageView
+        android:id="@+id/appSelection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        app:srcCompat="@android:drawable/ic_menu_preferences" />
+
     <TextView
         android:id="@+id/text_view_countdown"
         android:layout_width="wrap_content"
@@ -32,5 +42,23 @@
         android:layout_below="@+id/button_start_pause"
         android:layout_centerHorizontal="true"
         android:text="refresh" />
+
+    <Button
+        android:id="@+id/killButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="74dp"
+        android:text="KILL" />
+
+    <Button
+        android:id="@+id/unkillButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="174dp"
+        android:text="UNKILL" />
 
 </RelativeLayout>

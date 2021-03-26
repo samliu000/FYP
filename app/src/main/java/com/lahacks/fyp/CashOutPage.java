@@ -1,21 +1,29 @@
 package com.lahacks.fyp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.admin.DeviceAdminReceiver;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
 
-
 public class CashOutPage extends AppCompatActivity {
-
+    public static final String TAG = "CashOutPage";
     private TextView text_view_countdown;
     private Button button_start_pause;
     private Button button_refresh;
@@ -25,18 +33,113 @@ public class CashOutPage extends AppCompatActivity {
     private boolean timerRunning;
     private long timeLeftInMillis;
     private long endTime;
-    private double startMinutes;
     private long millisLeft;
+    private long oldMillisLeft;
+    private long newMinsAdded;
+
+    // app suspension declarations
+    DevicePolicyManager dpm;
+    DeviceAdminReceiver dar;
+    Button killButton;
+    Button unkillButton;
+    private ComponentName compName;
+    ImageView appSelection;
+    public static final int RESULT_ENABLE = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cash_out_page);
 
+        // attaching views to timer stuff
         text_view_countdown = findViewById(R.id.text_view_countdown);
         button_start_pause = findViewById(R.id.button_start_pause);
         button_refresh = findViewById(R.id.button_refresh);
 
+        // initialize device policy manager
+        dpm = (DevicePolicyManager) this.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        dar = new DeviceAdminReceiver();
+        compName = new ComponentName(this, MyAdmin.class);
+
+        // initialize buttons
+        killButton = findViewById(R.id.killButton);
+        unkillButton = findViewById(R.id.unkillButton);
+        appSelection = findViewById(R.id.appSelection);
+
+        // apps to ban/unban
+        String[] listOfPackages = {"com.google.android.youtube", "com.zhiliaoapp.musically"};
+
+        // move to app selection
+        appSelection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CashOutPage.this, AppSelect.class);
+                startActivity(intent);
+            }
+        });
+
+        // logic for the killButton
+        killButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                boolean active = dpm.isAdminActive(compName);
+
+                // kill tik tok!
+                if (active) {
+                    try {
+                        // suspend package
+                        dpm.setPackagesSuspended(compName, listOfPackages, true);
+                        Toast.makeText(CashOutPage.this, "Apps Successfully Blocked", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Log.d(TAG, "Security Exception " + e);
+                    }
+                }
+
+                // ask for admin privilege
+                else {
+
+                    // create intent to go to page where you ask for admin permission
+                    Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                    intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, compName);
+                    intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need " +
+                            "this permission to block apps");
+                    startActivityForResult(intent, RESULT_ENABLE);
+                }
+            }
+        });
+
+        unkillButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                boolean active = dpm.isAdminActive(compName);
+
+                // unkill tik tok!
+                if (active) {
+                    try {
+                        // suspend package
+                        dpm.setPackagesSuspended(compName, listOfPackages, false);
+                        Toast.makeText(CashOutPage.this, "Apps Successfully Unblocked", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Log.d(TAG, "Security Exception " + e);
+                    }
+                }
+
+                // ask for admin privilege
+                else {
+
+                    // create intent to go to page where you ask for admin permission
+                    Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                    intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, compName);
+                    intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need " +
+                            "this permission to block apps");
+                    startActivityForResult(intent, RESULT_ENABLE);
+                }
+            }
+        });
+
+        //starts or pauses the timer
         button_start_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,39 +151,31 @@ public class CashOutPage extends AppCompatActivity {
             }
         });
 
-        //Setting time
-        // possibly where to add the additional minutes achieved?
-        startMinutes = 2;
-        millisLeft = (long) startMinutes * 60000; //turns minutes to milliseconds
+        //this is for the adding new minutes logic
+        Intent intent = getIntent();
+        newMinsAdded = (long) intent.getIntExtra("newMins", 0);
 
         button_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                /*if(minutesAdded){
-                    newMins = whatever new minutes was added
+                //adds new minutes to the current timer
+                if (newMinsAdded != 0) {
                     oldMillisLeft = millisLeft;
-                    millisLeft = (newMins*60000) + oldMillisLeft;
-                }*/
-
-                if (millisLeft == 0) {
-                    Toast noMin = Toast.makeText(CashOutPage.this, "You have no minutes!", Toast.LENGTH_SHORT);
+                    millisLeft = (newMinsAdded*60000) + oldMillisLeft;
+                    newMinsAdded = 0;
+                } else if (newMinsAdded == 0) {
+                    Toast noMin = Toast.makeText(CashOutPage.this, "You have no minutes to cash out!", Toast.LENGTH_SHORT);
                     noMin.setGravity(Gravity.CENTER, 0, 0);
                     noMin.show();
-                    return;
-
-                    /*
-                    //FOR TESTING...
-                    long newMins = 2;
-                    millisLeft = (newMins * 60000);
-                    */
                 }
+
                 setTime(millisLeft);
             }
         });
     }
 
-    //Setting time of timer...
+    //setting time of timer seen by user...
     private void setTime(long milliseconds) {
         startTimeInMillis = milliseconds;
         resetTimer();
@@ -93,13 +188,13 @@ public class CashOutPage extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeLeftInMillis = millisUntilFinished;
-                millisLeft = timeLeftInMillis; //updating the start time for refresh
+                millisLeft = timeLeftInMillis; // updating the start time every tick - this prevents users from getting more mins if they don't have new minutes added
                 updateCountDownText();
             }
             @Override
             public void onFinish() {
                 timerRunning = false;
-                millisLeft = 0; //NEW
+                millisLeft = 0; // sets millisLeft to 0, since time has ran out
                 updateButtons();
             }
         }.start();
@@ -120,6 +215,7 @@ public class CashOutPage extends AppCompatActivity {
         updateButtons();
     }
 
+    //updates button texts or hides buttons based on whether the timer is running
     private void updateButtons() {
         if(timerRunning) {
             button_start_pause.setText("Pause");
@@ -157,7 +253,7 @@ public class CashOutPage extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putLong("millisLeft", millisLeft); //NEW - saves millisLeft..
+        editor.putLong("millisLeft", millisLeft); // saves millisLeft..
         editor.putLong("timeLeft", timeLeftInMillis);
         editor.putBoolean("timerRunning", timerRunning);
         editor.putLong("endTime", endTime);
@@ -168,14 +264,15 @@ public class CashOutPage extends AppCompatActivity {
             countdown_timer.cancel();
         }
     }
+
     @Override
     protected void onStart() {
         super.onStart();
 
         SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
 
-        timeLeftInMillis = prefs.getLong("timeLeft", startTimeInMillis); //default when app is started...
-        millisLeft = prefs.getLong("millisLeft", timeLeftInMillis); //NEWWWW
+        timeLeftInMillis = prefs.getLong("timeLeft", startTimeInMillis);
+        millisLeft = prefs.getLong("millisLeft", timeLeftInMillis);
         timerRunning = prefs.getBoolean("timerRunning", false);
 
         updateCountDownText();
