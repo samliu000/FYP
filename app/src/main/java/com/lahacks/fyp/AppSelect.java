@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import com.lahacks.fyp.adapter.AppAdapter;
 import com.lahacks.fyp.models.App;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +42,6 @@ public class AppSelect extends AppCompatActivity {
         // var initializing
         allApps = new ArrayList<>();
         selectedApps = new HashSet<>();
-        Log.d(TAG, "Set size b4 constructor: " + selectedApps.size());
         saveButton = findViewById(R.id.saveButton);
 
         RecyclerView rvApps = findViewById(R.id.rvApps);
@@ -62,7 +62,20 @@ public class AppSelect extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Set size after constructor: " + selectedApps.size());
+                Intent intent = new Intent();
+
+                // compile list of package names of the selected apps
+                ArrayList<String> selectedPackages = new ArrayList<>();
+                for(App app: allApps) {
+                    if(selectedApps.contains(app.getName())) {
+                        selectedPackages.add(app.getPackageName());
+                    }
+                }
+
+                // attach to intent and end activity
+                intent.putExtra("selected", selectedPackages);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -70,7 +83,7 @@ public class AppSelect extends AppCompatActivity {
 
     /**
      * Get all the applications on the phone
-     * @return
+     * @return list of all apps on the emulator
      */
     public List<App> getAllApplications() {
         final PackageManager pm = getPackageManager();
