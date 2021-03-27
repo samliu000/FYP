@@ -34,6 +34,10 @@ public class CashOutPage extends AppCompatActivity {
     public static final String TAG = "CashOutPage";
     public static final int SELECT = 20;
 
+    // persistence
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+
     private TextView text_view_countdown;
     private Button button_start_pause;
     private Button button_refresh;
@@ -77,16 +81,26 @@ public class CashOutPage extends AppCompatActivity {
         unkillButton = findViewById(R.id.unkillButton);
         appSelection = findViewById(R.id.appSelection);
 
+        // persistence initialization
+        prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        editor = prefs.edit();
+
         // apps to ban/unban
-        listOfPackages = new String[2];
-        listOfPackages[0] ="com.google.android.youtube";
-        listOfPackages[1] = "com.zhiliaoapp.musically";
+        String saved = prefs.getString("savedPackages", null);
+        if(saved != null) {
+            listOfPackages = saved.split("#");
+        }
+        else {
+            listOfPackages = new String[1];
+            listOfPackages[0] = "com.zhiliaoapp.musically";
+        }
 
         // move to app selection
         appSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CashOutPage.this, AppSelect.class);
+                intent.putExtra("saved", listOfPackages);
                 startActivityForResult(intent, SELECT);
             }
         });
@@ -268,9 +282,6 @@ public class CashOutPage extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
         editor.putLong("millisLeft", millisLeft); // saves millisLeft..
         editor.putLong("timeLeft", timeLeftInMillis);
         editor.putBoolean("timerRunning", timerRunning);
@@ -286,8 +297,6 @@ public class CashOutPage extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
 
         timeLeftInMillis = prefs.getLong("timeLeft", startTimeInMillis);
         millisLeft = prefs.getLong("millisLeft", timeLeftInMillis);
@@ -345,6 +354,14 @@ public class CashOutPage extends AppCompatActivity {
             Bundle args = data.getExtras();
             List<String> selectedPackages = (ArrayList<String>)args.getSerializable("selected");
             listOfPackages = selectedPackages.toArray(new String[selectedPackages.size()]);
+
+            // persist data
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < listOfPackages.length; i++) {
+                sb.append(listOfPackages[i]).append("#");
+            }
+            editor.putString("savedPackages", sb.toString());
+            editor.commit();
         }
     }
 }
