@@ -146,9 +146,14 @@ public class CashOutPage extends AppCompatActivity {
         button_start_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // kill
                 if(timerRunning) {
                     pauseTimer();
-                } else {
+                }
+
+                // unkill
+                else {
                     startTimer();
                 }
             }

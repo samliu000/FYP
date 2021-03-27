@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 public class CashInPage extends AppCompatActivity {
 
+    // Declare buttons
     private Button waterButton;
     private Button prodButton;
     private Button activityButton;
