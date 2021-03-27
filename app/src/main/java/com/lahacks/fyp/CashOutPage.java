@@ -185,12 +185,16 @@ public class CashOutPage extends AppCompatActivity {
         endTime = System.currentTimeMillis() + timeLeftInMillis;
 
         countdown_timer = new CountDownTimer(timeLeftInMillis, 1000) {
+
+            // if(millisLeft == 300000 || millisLeft == 60000) {send alarm}
             @Override
             public void onTick(long millisUntilFinished) {
                 timeLeftInMillis = millisUntilFinished;
                 millisLeft = timeLeftInMillis; // updating the start time every tick - this prevents users from getting more mins if they don't have new minutes added
                 updateCountDownText();
             }
+
+            // send notification if 0
             @Override
             public void onFinish() {
                 timerRunning = false;

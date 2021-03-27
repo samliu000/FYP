@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
         btNotification = findViewById(R.id.bt_notification);
 
+        /**if(time == 5 minutes || 1 minute){
+         *      send alarm
+         * }
+         */
         btNotification.setOnClickListener(view -> {
             Toast.makeText(this, "Reminder Set!", Toast.LENGTH_SHORT).show();
 

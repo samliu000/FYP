@@ -24,8 +24,8 @@ public class NotificationActivity extends BroadcastReceiver {
                 .setContentText("You only have five minutes remaining on the app")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        NotificationManagerCompat notificationManager5 = NotificationManagerCompat.from(context);
 
-        notificationManager.notify(200, builder.build());
+        notificationManager5.notify(200, builder.build());
     }
 }
