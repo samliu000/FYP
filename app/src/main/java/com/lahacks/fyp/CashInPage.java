@@ -89,7 +89,6 @@ public class CashInPage extends AppCompatActivity {
         dialog.show();
 
         waterPopupButton = (Button) waterPopup.findViewById(R.id.waterPopupButton);
-
         waterPopupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
