@@ -2,6 +2,7 @@ package com.lahacks.fyp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +17,10 @@ public class CashInPage extends AppCompatActivity {
     private Button prodButton;
     private Button activityButton;
     private Button submitButton;
+
+    // Dialog components
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
 
     private int newMins; //This accumulates the minutes added by the user with each button
 
@@ -35,8 +40,9 @@ public class CashInPage extends AppCompatActivity {
         waterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                addWaterMinutesDialog();
                 //Testing purposes
-                Toast.makeText(CashInPage.this, "Water", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CashInPage.this, "Water", Toast.LENGTH_SHORT).show();
                 //adds 1 minute to newMins - temporary until user input is coded
                 newMins += 1;
                 cashOutIntent.putExtra("newMins", newMins);
@@ -75,5 +81,13 @@ public class CashInPage extends AppCompatActivity {
                 cashOutIntent.putExtra("newMins", 0);
             }
         });
+    }
+
+    public void addWaterMinutesDialog(){
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View waterPopup = getLayoutInflater().inflate(R.layout.water_popup, null);
+        dialogBuilder.setView(waterPopup);
+        dialog = dialogBuilder.create();
+        dialog.show();
     }
 }
