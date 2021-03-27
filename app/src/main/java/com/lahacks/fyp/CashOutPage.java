@@ -1,5 +1,6 @@
 package com.lahacks.fyp;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,6 +25,8 @@ import java.util.Locale;
 
 public class CashOutPage extends AppCompatActivity {
     public static final String TAG = "CashOutPage";
+    public static final int SELECT = 20;
+
     private TextView text_view_countdown;
     private Button button_start_pause;
     private Button button_refresh;
@@ -74,7 +77,7 @@ public class CashOutPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CashOutPage.this, AppSelect.class);
-                startActivity(intent);
+                startActivityForResult(intent, SELECT);
             }
         });
 
@@ -143,9 +146,14 @@ public class CashOutPage extends AppCompatActivity {
         button_start_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // kill
                 if(timerRunning) {
                     pauseTimer();
-                } else {
+                }
+
+                // unkill
+                else {
                     startTimer();
                 }
             }
@@ -289,6 +297,14 @@ public class CashOutPage extends AppCompatActivity {
             } else {
                 startTimer();
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == SELECT && resultCode == RESULT_OK) {
+
         }
     }
 }

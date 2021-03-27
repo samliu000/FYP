@@ -1,37 +1,52 @@
 package com.lahacks.fyp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.lahacks.fyp.adapter.AppAdapter;
 import com.lahacks.fyp.models.App;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AppSelect extends AppCompatActivity {
     public static final String TAG = "AppSelect";
+
+    // var declarations
     ImageView appIcon;
     List<App> allApps;
+    Set<String> selectedApps;
+    Button saveButton;
+    String sample;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_select);
 
+        // var initializing
         allApps = new ArrayList<>();
+        selectedApps = new HashSet<>();
+        Log.d(TAG, "Set size b4 constructor: " + selectedApps.size());
+        saveButton = findViewById(R.id.saveButton);
 
         RecyclerView rvApps = findViewById(R.id.rvApps);
 
-        final AppAdapter appAdapter = new AppAdapter(this, allApps);
+        final AppAdapter appAdapter = new AppAdapter(this, allApps, selectedApps, sample);
 
         // attach adapter to recycler view
         rvApps.setAdapter(appAdapter);
@@ -39,18 +54,18 @@ public class AppSelect extends AppCompatActivity {
         // set layout manager
         rvApps.setLayoutManager(new GridLayoutManager(this, 3));
 
+        // add apps to the recyclerview
         allApps.addAll(getAllApplications());
         appAdapter.notifyDataSetChanged();
 
-//        appIcon = findViewById(R.id.appIcon);
-//        try {
-//            String pkg = "com.zhiliaoapp.musically";//your package name
-//            Drawable icon = this.getPackageManager().getApplicationIcon(pkg);
-//            this.getPackageManager().getApplicationLabel(pkg);
-//            appIcon.setImageDrawable(icon);
-//        } catch (PackageManager.NameNotFoundException ne) {
-//
-//        }
+        // logic for the save Button
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Set size after constructor: " + selectedApps.size());
+            }
+        });
+
     }
 
     /**
@@ -66,7 +81,6 @@ public class AppSelect extends AppCompatActivity {
 
         // print out relevant info about each application
         for (ApplicationInfo packageInfo : packages) {
-
 
             // get package, app name, and icon
             String pkg = packageInfo.packageName;
@@ -95,5 +109,4 @@ public class AppSelect extends AppCompatActivity {
         }
         return allApps;
     }
-
 }

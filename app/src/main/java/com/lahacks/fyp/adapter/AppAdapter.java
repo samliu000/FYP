@@ -21,21 +21,27 @@ import java.util.List;
 import java.util.Set;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder>{
+    public static final String TAG = "AppAdapter";
 
     Context context;
     List<App> apps;
     Set<String> selectedApps;
 
-    public AppAdapter(Context context, List<App> apps) {
+    public AppAdapter(Context context, List<App> apps, Set<String> selectedApps, String sample) {
         this.context = context;
         this.apps = apps;
-        selectedApps = new HashSet<>();
+        this.selectedApps = selectedApps;
+        Log.d(TAG, "Sample size constructor: " + this.selectedApps.size());
+        selectedApps.add("Hi");
+        selectedApps.add("Hi1");
+        selectedApps.add("Hi2");
+
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d("MovieAdapter", "onCreateViewHolder");
+        Log.d(TAG, "onCreateViewHolder");
         View movieView = LayoutInflater.from(context).inflate(R.layout.item_app, parent, false);
         return new ViewHolder(movieView);
     }
@@ -82,6 +88,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder>{
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    // toggle between on and off by setting colors
                     if(selectedApps.contains(app.getName())) {
                         container.setBackgroundColor(0x00000000);
                         selectedApps.remove(appName.getText().toString());
