@@ -18,6 +18,8 @@ public class CashInPage extends AppCompatActivity {
     private Button activityButton;
     private Button submitButton;
 
+    private ProdPopup prodPopup = new ProdPopup();
+
     // Dialog components
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
