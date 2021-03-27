@@ -52,13 +52,22 @@ public class CashInPage extends AppCompatActivity {
         prodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                addProdMinutesDialog();
                 //Testing purposes
-                Toast.makeText(CashInPage.this, "Productivity", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CashInPage.this, "Productivity", Toast.LENGTH_SHORT).show();
                 //adds 5 minutes to newMins - temporary until user input is coded
                 newMins += 5;
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
+
+        /*prodPopupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMins += 5;
+                cashOutIntent.putExtra("newMins", newMins);
+            }
+        });*/
 
         activityButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +96,14 @@ public class CashInPage extends AppCompatActivity {
         dialogBuilder = new AlertDialog.Builder(this);
         final View waterPopup = getLayoutInflater().inflate(R.layout.water_popup, null);
         dialogBuilder.setView(waterPopup);
+        dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    public void addProdMinutesDialog(){
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View prodPopup = getLayoutInflater().inflate(R.layout.productivity_popup, null);
+        dialogBuilder.setView(prodPopup);
         dialog = dialogBuilder.create();
         dialog.show();
     }
