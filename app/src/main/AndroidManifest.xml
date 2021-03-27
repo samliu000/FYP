@@ -11,8 +11,20 @@
         android:theme="@style/Theme.FYP">
         <activity android:name=".NotificationActivity"></activity>
         <activity android:name=".AppSelect" />
-        <activity android:name=".CashOutPage" />
-        <activity android:name=".CashInPage" />
+        <activity
+            android:name=".CashOutPage"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".CashInPage"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

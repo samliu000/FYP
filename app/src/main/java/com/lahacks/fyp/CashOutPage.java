@@ -1,5 +1,6 @@
 package com.lahacks.fyp;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +10,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -20,10 +24,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lahacks.fyp.models.App;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class CashOutPage extends AppCompatActivity {
     public static final String TAG = "CashOutPage";
+    public static final int SELECT = 20;
+
     private TextView text_view_countdown;
     private Button button_start_pause;
     private Button button_refresh;
@@ -45,6 +55,7 @@ public class CashOutPage extends AppCompatActivity {
     private ComponentName compName;
     ImageView appSelection;
     public static final int RESULT_ENABLE = 11;
+    String[] listOfPackages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +78,16 @@ public class CashOutPage extends AppCompatActivity {
         appSelection = findViewById(R.id.appSelection);
 
         // apps to ban/unban
-        String[] listOfPackages = {"com.google.android.youtube", "com.zhiliaoapp.musically"};
+        listOfPackages = new String[2];
+        listOfPackages[0] ="com.google.android.youtube";
+        listOfPackages[1] = "com.zhiliaoapp.musically";
 
         // move to app selection
         appSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CashOutPage.this, AppSelect.class);
-                startActivity(intent);
+                startActivityForResult(intent, SELECT);
             }
         });
 
@@ -119,7 +132,7 @@ public class CashOutPage extends AppCompatActivity {
                 if (active) {
                     try {
                         // suspend package
-                        dpm.setPackagesSuspended(compName, listOfPackages, false);
+                        dpm.setPackagesSuspended(compName, getAllPackageNames(), false);
                         Toast.makeText(CashOutPage.this, "Apps Successfully Unblocked", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         Log.d(TAG, "Security Exception " + e);
@@ -143,9 +156,14 @@ public class CashOutPage extends AppCompatActivity {
         button_start_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // kill
                 if(timerRunning) {
                     pauseTimer();
-                } else {
+                }
+
+                // unkill
+                else {
                     startTimer();
                 }
             }
@@ -293,6 +311,44 @@ public class CashOutPage extends AppCompatActivity {
             } else {
                 startTimer();
             }
+        }
+    }
+
+    /**
+     * Get all the applications on the phone
+     * @return list of all apps on the emulator
+     */
+    public String[] getAllPackageNames() {
+        final PackageManager pm = getPackageManager();
+
+        //get a list of installed apps.
+        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        List<String> allPackages = new ArrayList<>();
+
+        // print out relevant info about each application
+        for (ApplicationInfo packageInfo : packages) {
+
+            // get package
+            String pkg = packageInfo.packageName;
+
+            // Only add packages that can be launched
+            if(pm.getLaunchIntentForPackage(packageInfo.packageName) != null) {
+                if(!pkg.equals("com.lahacks.fyp")) {
+                    allPackages.add(pkg);
+                }
+            }
+        }
+
+        return allPackages.toArray(new String[allPackages.size()]);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == SELECT && resultCode == RESULT_OK) {
+            Bundle args = data.getExtras();
+            List<String> selectedPackages = (ArrayList<String>)args.getSerializable("selected");
+            listOfPackages = selectedPackages.toArray(new String[selectedPackages.size()]);
         }
     }
 }
