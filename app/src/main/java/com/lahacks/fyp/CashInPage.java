@@ -18,8 +18,6 @@ public class CashInPage extends AppCompatActivity {
     private Button activityButton;
     private Button submitButton;
 
-    private ProdPopup prodPopup = new ProdPopup();
-
     // Dialog components
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
@@ -43,9 +41,7 @@ public class CashInPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addWaterMinutesDialog();
-                //Testing purposes
-                //Toast.makeText(CashInPage.this, "Water", Toast.LENGTH_SHORT).show();
-                //adds 1 minute to newMins - temporary until user input is coded
+                //correct minutes (1 tiktok minute/1 cup water)
                 newMins += 1;
                 cashOutIntent.putExtra("newMins", newMins);
             }
@@ -55,29 +51,18 @@ public class CashInPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addProdMinutesDialog();
-                //Testing purposes
-                //Toast.makeText(CashInPage.this, "Productivity", Toast.LENGTH_SHORT).show();
-                //adds 5 minutes to newMins - temporary until user input is coded
-                newMins += 5;
+                //correct minutes (30 tiktok minutes/1 hour productivity)
+                newMins += 30;
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
 
-        /*prodPopupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newMins += 5;
-                cashOutIntent.putExtra("newMins", newMins);
-            }
-        });*/
-
         activityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Testing purposes
-                Toast.makeText(CashInPage.this, "Acitvity", Toast.LENGTH_SHORT).show();
-                //adds 10 minutes to newMins - temporary until user input is coded
-                newMins += 10;
+                addActivityMinutesDialog();
+                //correct minutes (6 tiktok minutes/30 minutes activity)
+                newMins += 6;
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
@@ -106,6 +91,14 @@ public class CashInPage extends AppCompatActivity {
         dialogBuilder = new AlertDialog.Builder(this);
         final View prodPopup = getLayoutInflater().inflate(R.layout.productivity_popup, null);
         dialogBuilder.setView(prodPopup);
+        dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    public void addActivityMinutesDialog(){
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View activityPopup = getLayoutInflater().inflate(R.layout.activity_popup, null);
+        dialogBuilder.setView(activityPopup);
         dialog = dialogBuilder.create();
         dialog.show();
     }

@@ -3,16 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="150dp"
         android:orientation="vertical"
         android:background="@color/light_blue"
         tools:layout_editor_absoluteX="0dp"
@@ -23,33 +21,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="5dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="0dp"
+            android:padding="12dp"
+            android:layout_margin="25dp"
             android:text="CASH IN PRODUCTIVITY"
             android:textColor="@color/black"
             android:textSize="30sp" />
 
         <TextView
             android:id="@+id/prodInstructions"
-            android:layout_width="wrap_content"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
             android:gravity="center"
             android:padding="12dp"
-            android:text="30 minutes of productivity = \n6 minutes of Tik Tok!"
+            android:text="1 hour of productivity = \n30 minutes of Tik Tok!"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/prodPopupButton"
+            android:id="@+id/waterButton"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@drawable/rounded_button_white"
             android:padding="12dp"
-            android:text="+30 MIN PRODUCTIVITY"
+            android:text="+1 CUP OF WATER"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
