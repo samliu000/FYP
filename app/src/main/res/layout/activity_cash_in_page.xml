@@ -19,6 +19,8 @@
         android:layout_marginBottom="100dp"
         android:orientation="vertical">
 
+        <!-- test comment -->
+        
         <TextView
             android:id="@+id/cashInText"
             android:layout_width="match_parent"
