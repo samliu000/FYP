@@ -31,11 +31,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder>{
         this.context = context;
         this.apps = apps;
         this.selectedApps = selectedApps;
-        Log.d(TAG, "Sample size constructor: " + this.selectedApps.size());
-        selectedApps.add("Hi");
-        selectedApps.add("Hi1");
-        selectedApps.add("Hi2");
-
     }
 
     @NonNull
