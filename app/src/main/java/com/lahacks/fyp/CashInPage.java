@@ -17,6 +17,7 @@ public class CashInPage extends AppCompatActivity {
     private Button prodButton;
     private Button activityButton;
     private Button submitButton;
+    private Button waterPopupButton;
 
     // Dialog components
     private AlertDialog.Builder dialogBuilder;
@@ -41,10 +42,6 @@ public class CashInPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addWaterMinutesDialog();
-                //Testing purposes
-                //Toast.makeText(CashInPage.this, "Water", Toast.LENGTH_SHORT).show();
-                //adds 1 minute to newMins - temporary until user input is coded
-                newMins += 1;
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
@@ -84,10 +81,21 @@ public class CashInPage extends AppCompatActivity {
     }
 
     public void addWaterMinutesDialog(){
+
         dialogBuilder = new AlertDialog.Builder(this);
         final View waterPopup = getLayoutInflater().inflate(R.layout.water_popup, null);
         dialogBuilder.setView(waterPopup);
         dialog = dialogBuilder.create();
         dialog.show();
+
+        waterPopupButton = (Button) waterPopup.findViewById(R.id.waterPopupButton);
+
+        waterPopupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(CashInPage.this, "Cashed in water minutes!", Toast.LENGTH_SHORT).show();
+                newMins += 1;
+            }
+        });
     }
 }
