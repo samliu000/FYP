@@ -17,12 +17,14 @@ public class CashInPage extends AppCompatActivity {
     private Button prodButton;
     private Button activityButton;
     private Button submitButton;
+    private Button waterPopupButton;
 
     // Dialog components
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
     private int newMins; //This accumulates the minutes added by the user with each button
+    private int newWater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +42,7 @@ public class CashInPage extends AppCompatActivity {
         waterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addWaterMinutesDialog();
-                //correct minutes (1 tiktok minute/1 cup water)
-                newMins += 1;
+                newMins += addWaterMinutesDialog();
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
@@ -50,9 +50,10 @@ public class CashInPage extends AppCompatActivity {
         prodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addProdMinutesDialog();
-                //correct minutes (30 tiktok minutes/1 hour productivity)
-                newMins += 30;
+                //Testing purposes
+                Toast.makeText(CashInPage.this, "Productivity", Toast.LENGTH_SHORT).show();
+                //adds 5 minutes to newMins - temporary until user input is coded
+                newMins += 5;
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
@@ -60,9 +61,10 @@ public class CashInPage extends AppCompatActivity {
         activityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addActivityMinutesDialog();
-                //correct minutes (6 tiktok minutes/30 minutes activity)
-                newMins += 6;
+                //Testing purposes
+                Toast.makeText(CashInPage.this, "Acitvity", Toast.LENGTH_SHORT).show();
+                //adds 10 minutes to newMins - temporary until user input is coded
+                newMins += 10;
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
@@ -79,27 +81,23 @@ public class CashInPage extends AppCompatActivity {
         });
     }
 
-    public void addWaterMinutesDialog(){
+    public int addWaterMinutesDialog(){
+
         dialogBuilder = new AlertDialog.Builder(this);
         final View waterPopup = getLayoutInflater().inflate(R.layout.water_popup, null);
         dialogBuilder.setView(waterPopup);
         dialog = dialogBuilder.create();
         dialog.show();
-    }
 
-    public void addProdMinutesDialog(){
-        dialogBuilder = new AlertDialog.Builder(this);
-        final View prodPopup = getLayoutInflater().inflate(R.layout.productivity_popup, null);
-        dialogBuilder.setView(prodPopup);
-        dialog = dialogBuilder.create();
-        dialog.show();
-    }
+        waterPopupButton = (Button) waterPopup.findViewById(R.id.waterPopupButton);
+        waterPopupButton.setOnClickListener(new View.OnClickListener() {
 
-    public void addActivityMinutesDialog(){
-        dialogBuilder = new AlertDialog.Builder(this);
-        final View activityPopup = getLayoutInflater().inflate(R.layout.activity_popup, null);
-        dialogBuilder.setView(activityPopup);
-        dialog = dialogBuilder.create();
-        dialog.show();
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(CashInPage.this, "Cashed in water minutes!", Toast.LENGTH_SHORT).show();
+                newWater = 1;
+            }
+        });
+        return 1;
     }
 }
