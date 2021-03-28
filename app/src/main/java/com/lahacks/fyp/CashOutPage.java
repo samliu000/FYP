@@ -2,8 +2,13 @@ package com.lahacks.fyp;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.admin.DeviceAdminReceiver;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -12,6 +17,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +41,10 @@ public class CashOutPage extends AppCompatActivity {
     public static final String TAG = "CashOutPage";
     public static final int SELECT = 20;
 
+    // persistence
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+
     private TextView text_view_countdown;
     private Button button_start_pause;
     private Button button_refresh;
@@ -50,8 +61,6 @@ public class CashOutPage extends AppCompatActivity {
     // app suspension declarations
     DevicePolicyManager dpm;
     DeviceAdminReceiver dar;
-    Button killButton;
-    Button unkillButton;
     private ComponentName compName;
     ImageView appSelection;
     public static final int RESULT_ENABLE = 11;
@@ -61,6 +70,9 @@ public class CashOutPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cash_out_page);
+
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
 
         // attaching views to timer stuff
         text_view_countdown = findViewById(R.id.text_view_countdown);
@@ -73,98 +85,50 @@ public class CashOutPage extends AppCompatActivity {
         compName = new ComponentName(this, MyAdmin.class);
 
         // initialize buttons
-        killButton = findViewById(R.id.killButton);
-        unkillButton = findViewById(R.id.unkillButton);
         appSelection = findViewById(R.id.appSelection);
 
+        // persistence initialization
+        prefs = getSharedPreferences("prefs", MODE_PRIVATE);
+        editor = prefs.edit();
+
         // apps to ban/unban
-        listOfPackages = new String[2];
-        listOfPackages[0] ="com.google.android.youtube";
-        listOfPackages[1] = "com.zhiliaoapp.musically";
+        String saved = prefs.getString("savedPackages", null);
+        if(saved != null) {
+            listOfPackages = saved.split("#");
+        }
+        else {
+            listOfPackages = new String[1];
+            listOfPackages[0] = "com.zhiliaoapp.musically";
+        }
+
 
         // move to app selection
         appSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CashOutPage.this, AppSelect.class);
+                intent.putExtra("saved", listOfPackages);
                 startActivityForResult(intent, SELECT);
-            }
-        });
-
-        // logic for the killButton
-        killButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                boolean active = dpm.isAdminActive(compName);
-
-                // kill tik tok!
-                if (active) {
-                    try {
-                        // suspend package
-                        dpm.setPackagesSuspended(compName, listOfPackages, true);
-                        Toast.makeText(CashOutPage.this, "Apps Successfully Blocked", Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        Log.d(TAG, "Security Exception " + e);
-                    }
-                }
-
-                // ask for admin privilege
-                else {
-
-                    // create intent to go to page where you ask for admin permission
-                    Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                    intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, compName);
-                    intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need " +
-                            "this permission to block apps");
-                    startActivityForResult(intent, RESULT_ENABLE);
-                }
-            }
-        });
-
-        unkillButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                boolean active = dpm.isAdminActive(compName);
-
-                // unkill tik tok!
-                if (active) {
-                    try {
-                        // suspend package
-                        dpm.setPackagesSuspended(compName, getAllPackageNames(), false);
-                        Toast.makeText(CashOutPage.this, "Apps Successfully Unblocked", Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        Log.d(TAG, "Security Exception " + e);
-                    }
-                }
-
-                // ask for admin privilege
-                else {
-
-                    // create intent to go to page where you ask for admin permission
-                    Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                    intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, compName);
-                    intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need " +
-                            "this permission to block apps");
-                    startActivityForResult(intent, RESULT_ENABLE);
-                }
             }
         });
 
         //starts or pauses the timer
         button_start_pause.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-
-                // kill
+                // kill or pause timer
                 if(timerRunning) {
+                    killApps();
                     pauseTimer();
                 }
-                // unkill
+                // unkill or startTimer
                 else {
+                    unkillApps();
                     startTimer();
+                    Toast.makeText(CashOutPage.this, "Reminder Set!", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 
@@ -192,6 +156,60 @@ public class CashOutPage extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void killApps() {
+        boolean active = dpm.isAdminActive(compName);
+
+        // kill tik tok!
+        if (active) {
+            try {
+                // suspend package
+                dpm.setPackagesSuspended(compName, listOfPackages, true);
+                Toast.makeText(CashOutPage.this, "Apps Successfully Blocked", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Log.d(TAG, "Security Exception " + e);
+            }
+        }
+
+        // ask for admin privilege
+        else {
+
+            // create intent to go to page where you ask for admin permission
+            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, compName);
+            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need " +
+                    "this permission to block apps");
+            startActivityForResult(intent, RESULT_ENABLE);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void unkillApps() {
+        boolean active = dpm.isAdminActive(compName);
+
+        // unkill tik tok!
+        if (active) {
+            try {
+                // suspend package
+                dpm.setPackagesSuspended(compName, getAllPackageNames(), false);
+                Toast.makeText(CashOutPage.this, "Apps Successfully Unblocked", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Log.d(TAG, "Security Exception " + e);
+            }
+        }
+
+        // ask for admin privilege
+        else {
+
+            // create intent to go to page where you ask for admin permission
+            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, compName);
+            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need " +
+                    "this permission to block apps");
+            startActivityForResult(intent, RESULT_ENABLE);
+        }
+    }
+
     //setting time of timer seen by user...
     private void setTime(long milliseconds) {
         startTimeInMillis = milliseconds;
@@ -202,12 +220,16 @@ public class CashOutPage extends AppCompatActivity {
         endTime = System.currentTimeMillis() + timeLeftInMillis;
 
         countdown_timer = new CountDownTimer(timeLeftInMillis, 1000) {
+
+            // if(millisLeft == 300000 || millisLeft == 60000) {send alarm}
             @Override
             public void onTick(long millisUntilFinished) {
                 timeLeftInMillis = millisUntilFinished;
                 millisLeft = timeLeftInMillis; // updating the start time every tick - this prevents users from getting more mins if they don't have new minutes added
                 updateCountDownText();
             }
+
+            // send notification if 0
             @Override
             public void onFinish() {
                 timerRunning = false;
@@ -253,12 +275,34 @@ public class CashOutPage extends AppCompatActivity {
         int minutes = (int) ((timeLeftInMillis / 1000) % 3600) / 60;
         int seconds = (int) (timeLeftInMillis / 1000) % 60;
 
-        /* Here...
-        if (minutes == 5 && seconds == 0) {
-            Toast oneMin = Toast.makeText(CashOutPage.this, "You have 5 min left!", Toast.LENGTH_SHORT);
-            oneMin.setGravity(Gravity.CENTER, 0, 0);
-            oneMin.show();
-        }*/
+        Intent intent = new Intent(CashOutPage.this, NotificationActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(CashOutPage.this, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        // this will send the create the appropriate notification
+        if(minutes == 5){
+            createNotificationChannel5();
+            if(seconds == 5){
+                long timeAtButtonClick = System.currentTimeMillis();
+                //RTC_WAKEUP wakes up the device to fire the pending intent at the specified time
+                alarmManager.set(AlarmManager.RTC_WAKEUP,
+                        timeAtButtonClick,
+                        pendingIntent);
+            }
+
+        }
+
+        if(minutes == 1){
+            createNotificationChannel1();
+            if(seconds==5){
+                long timeAtButtonClick = System.currentTimeMillis();
+                //RTC_WAKEUP wakes up the device to fire the pending intent at the specified time
+                alarmManager.set(AlarmManager.RTC_WAKEUP,
+                        timeAtButtonClick,
+                        pendingIntent);
+            }
+        }
 
         String timeLeftFormatted;
         if(hours > 0){
@@ -273,9 +317,6 @@ public class CashOutPage extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
 
         editor.putLong("millisLeft", millisLeft); // saves millisLeft..
         editor.putLong("timeLeft", timeLeftInMillis);
@@ -292,8 +333,6 @@ public class CashOutPage extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        SharedPreferences prefs = getSharedPreferences("prefs", MODE_PRIVATE);
 
         timeLeftInMillis = prefs.getLong("timeLeft", startTimeInMillis);
         millisLeft = prefs.getLong("millisLeft", timeLeftInMillis);
@@ -351,6 +390,39 @@ public class CashOutPage extends AppCompatActivity {
             Bundle args = data.getExtras();
             List<String> selectedPackages = (ArrayList<String>)args.getSerializable("selected");
             listOfPackages = selectedPackages.toArray(new String[selectedPackages.size()]);
+
+            // persist data
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < listOfPackages.length; i++) {
+                sb.append(listOfPackages[i]).append("#");
+            }
+            editor.putString("savedPackages", sb.toString());
+            editor.commit();
+        }
+    }
+
+    private void createNotificationChannel5(){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            CharSequence name = "NotificationReminderChannel";
+            String description = "Channel for Notification Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyFiveMinute", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void createNotificationChannel1(){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            CharSequence name = "NotificationReminderChannel";
+            String description = "Channel for Notification Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyOneMinute", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+
         }
     }
 }
