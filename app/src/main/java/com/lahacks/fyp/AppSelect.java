@@ -44,11 +44,18 @@ public class AppSelect extends AppCompatActivity {
         selectedApps = new HashSet<>();
         saveButton = findViewById(R.id.saveButton);
 
+        // get saved apps and add to selectedApps
+        Bundle passedInData = getIntent().getExtras();
+        String[] saved = passedInData.getStringArray("saved");
+        Log.d(TAG, "PROCESSING SAVED");
+        for(String i: saved) {
+            Log.d(TAG, "Pushing: " + i);
+            selectedApps.add(i);
+        }
+
+        // recycler/adapter initiation
         RecyclerView rvApps = findViewById(R.id.rvApps);
-
         final AppAdapter appAdapter = new AppAdapter(this, allApps, selectedApps, sample);
-
-        // attach adapter to recycler view
         rvApps.setAdapter(appAdapter);
 
         // set layout manager
@@ -67,7 +74,7 @@ public class AppSelect extends AppCompatActivity {
                 // compile list of package names of the selected apps
                 ArrayList<String> selectedPackages = new ArrayList<>();
                 for(App app: allApps) {
-                    if(selectedApps.contains(app.getName())) {
+                    if(selectedApps.contains(app.getName()) || selectedApps.contains(app.getPackageName())) {
                         selectedPackages.add(app.getPackageName());
                     }
                 }
