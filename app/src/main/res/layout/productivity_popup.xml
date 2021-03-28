@@ -3,14 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="150dp"
         android:orientation="vertical"
         android:background="@color/light_blue"
         tools:layout_editor_absoluteX="0dp"
@@ -21,8 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="12dp"
-            android:layout_margin="25dp"
+            android:padding="5dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="0dp"
             android:text="CASH IN PRODUCTIVITY"
             android:textColor="@color/black"
             android:textSize="30sp" />
@@ -34,7 +37,7 @@
             android:layout_margin="30dp"
             android:gravity="center"
             android:padding="12dp"
-            android:text="1 hour of productivity = \n30 minutes of Tik Tok!"
+            android:text="1 hour of productivity = \n30 minutes of screen time!"
             android:textColor="@color/black"
             android:textSize="20sp" />
 

@@ -1,10 +1,13 @@
 package com.lahacks.fyp;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +39,9 @@ public class CashInPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cash_in_page);
+
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
 
         waterButton = findViewById(R.id.waterButton);
         prodButton = findViewById(R.id.prodButton);
@@ -97,7 +103,6 @@ public class CashInPage extends AppCompatActivity {
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
-
     }
 
     public int addProdMinutesDialog(){

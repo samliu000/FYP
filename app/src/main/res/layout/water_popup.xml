@@ -37,7 +37,7 @@
             android:layout_margin="30dp"
             android:gravity="center"
             android:padding="12dp"
-            android:text="1 cup of water = \n6 minutes of Tik Tok!"
+            android:text="1 cup of water = \n1 minute of screen time!"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -49,7 +49,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/rounded_button_white"
             android:padding="12dp"
-            android:text="+1 CUP OF WATER"
+            android:text="+ 1 CUP OF WATER"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
