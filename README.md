@@ -19,11 +19,8 @@ Sign In            |  Walkthrough
 !<img src="https://github.com/samliu000/MoodyBuds/blob/main/signInDemo.gif" width=250><br> |  <img src="https://github.com/samliu000/MoodyBuds/blob/main/walkThrough.gif" width=250><br>
 ### Collaborators
 - Kimberly Kao
-- Stephanie Deleon
+- Stephanie De Leon
 - Camryn Sumabat
 - Patriz Elaine Daroy
 - Samuel Liu
 
-## Open-source libraries used
-- [Firebase](https://firebase.google.com/) - User Authentication and Realtime Database provider
-- [Glide](https://github.com/bumptech/glide) - Image loading and caching library for Androids
