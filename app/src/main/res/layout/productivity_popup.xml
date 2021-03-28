@@ -39,7 +39,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/waterButton"
+            android:id="@+id/prodPopupButton"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
