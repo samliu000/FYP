@@ -39,7 +39,7 @@
             android:layout_margin="30dp"
             android:gravity="center"
             android:padding="12dp"
-            android:text="30 minutes of activity = \n6 minutes of Tik Tok!"
+            android:text="30 minutes of activity = \n6 minutes of screen time!"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
