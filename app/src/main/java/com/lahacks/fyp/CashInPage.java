@@ -18,6 +18,8 @@ public class CashInPage extends AppCompatActivity {
     private Button activityButton;
     private Button submitButton;
     private Button waterPopupButton;
+    private Button prodPopupButton;
+    private Button activityPopupButton;
 
     // Dialog components
     private AlertDialog.Builder dialogBuilder;
@@ -25,6 +27,8 @@ public class CashInPage extends AppCompatActivity {
 
     private int newMins; //This accumulates the minutes added by the user with each button
     private int newWater;
+    private int newProd;
+    private int newActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,7 @@ public class CashInPage extends AppCompatActivity {
                 //Testing purposes
                 Toast.makeText(CashInPage.this, "Productivity", Toast.LENGTH_SHORT).show();
                 //adds 5 minutes to newMins - temporary until user input is coded
-                newMins += 5;
+                newMins += addProdMinutesDialog();
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
@@ -64,7 +68,7 @@ public class CashInPage extends AppCompatActivity {
                 //Testing purposes
                 Toast.makeText(CashInPage.this, "Acitvity", Toast.LENGTH_SHORT).show();
                 //adds 10 minutes to newMins - temporary until user input is coded
-                newMins += 10;
+                newMins += addActivityMinutesDialog();
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
@@ -99,5 +103,45 @@ public class CashInPage extends AppCompatActivity {
             }
         });
         return 1;
+    }
+
+    public int addProdMinutesDialog(){
+
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View prodPopup = getLayoutInflater().inflate(R.layout.productivity_popup, null);
+        dialogBuilder.setView(prodPopup);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        prodPopupButton = (Button) prodPopup.findViewById(R.id.prodPopupButton);
+        prodPopupButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(CashInPage.this, "Cashed in productivity minutes!", Toast.LENGTH_SHORT).show();
+                newProd = 30;
+            }
+        });
+        return 30;
+    }
+
+    public int addActivityMinutesDialog(){
+
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View activityPopup = getLayoutInflater().inflate(R.layout.activity_popup, null);
+        dialogBuilder.setView(activityPopup);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        activityPopupButton = (Button) activityPopup.findViewById(R.id.activityPopupButton);
+        activityPopupButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(CashInPage.this, "Cashed in activity minutes!", Toast.LENGTH_SHORT).show();
+                newActivity = 6;
+            }
+        });
+        return 6;
     }
 }
