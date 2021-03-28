@@ -91,10 +91,11 @@ public class CashInPage extends AppCompatActivity {
 
         waterPopupButton = (Button) waterPopup.findViewById(R.id.waterPopupButton);
         waterPopupButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(CashInPage.this, "Cashed in water minutes!", Toast.LENGTH_SHORT).show();
-                // newWater = 1;
+                newWater = 1;
             }
         });
         return 1;
