@@ -4,6 +4,10 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.admin.DeviceAdminReceiver;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -82,6 +86,7 @@ public class CashOutPage extends AppCompatActivity {
         listOfPackages[0] ="com.google.android.youtube";
         listOfPackages[1] = "com.zhiliaoapp.musically";
 
+
         // move to app selection
         appSelection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +161,6 @@ public class CashOutPage extends AppCompatActivity {
         button_start_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // kill
                 if(timerRunning) {
                     pauseTimer();
@@ -165,7 +169,9 @@ public class CashOutPage extends AppCompatActivity {
                 // unkill
                 else {
                     startTimer();
+                    Toast.makeText(CashOutPage.this, "Reminder Set!", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 
@@ -258,6 +264,35 @@ public class CashOutPage extends AppCompatActivity {
         int minutes = (int) ((timeLeftInMillis / 1000) % 3600) / 60;
         int seconds = (int) (timeLeftInMillis / 1000) % 60;
 
+        Intent intent = new Intent(CashOutPage.this, NotificationActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(CashOutPage.this, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        // this will send the create the appropriate notification
+        if(minutes == 5){
+            createNotificationChannel5();
+            if(seconds == 5){
+                long timeAtButtonClick = System.currentTimeMillis();
+                //RTC_WAKEUP wakes up the device to fire the pending intent at the specified time
+                alarmManager.set(AlarmManager.RTC_WAKEUP,
+                        timeAtButtonClick,
+                        pendingIntent);
+            }
+
+        }
+
+        if(minutes == 1){
+            createNotificationChannel1();
+            if(seconds==5){
+                long timeAtButtonClick = System.currentTimeMillis();
+                //RTC_WAKEUP wakes up the device to fire the pending intent at the specified time
+                alarmManager.set(AlarmManager.RTC_WAKEUP,
+                        timeAtButtonClick,
+                        pendingIntent);
+            }
+        }
+
         String timeLeftFormatted;
         if(hours > 0){
             timeLeftFormatted = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds);
@@ -349,6 +384,31 @@ public class CashOutPage extends AppCompatActivity {
             Bundle args = data.getExtras();
             List<String> selectedPackages = (ArrayList<String>)args.getSerializable("selected");
             listOfPackages = selectedPackages.toArray(new String[selectedPackages.size()]);
+        }
+    }
+
+    private void createNotificationChannel5(){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            CharSequence name = "NotificationReminderChannel";
+            String description = "Channel for Notification Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyFiveMinute", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void createNotificationChannel1(){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            CharSequence name = "NotificationReminderChannel";
+            String description = "Channel for Notification Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyOneMinute", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+
         }
     }
 }

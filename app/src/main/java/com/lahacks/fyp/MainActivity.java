@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        createNotificationChannel();
-
         btNotification = findViewById(R.id.bt_notification);
 
         /**if(time == 5 minutes || 1 minute){
@@ -94,16 +92,5 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void createNotificationChannel(){
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-            CharSequence name = "MenubitReminderChannel";
-            String description = "Channel for Lemubit Reminder";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("notifyLemubit", name, importance);
-            channel.setDescription(description);
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
 }
