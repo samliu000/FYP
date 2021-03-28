@@ -25,7 +25,7 @@ In our app, the timer and the apps selected to ban are persisted. Therefore, if 
 ### App Walkthough GIF
 
 
-App Choosing                |  Timer Start             |  Ban App
+App Choosing                |  Timer Start             |  Banned App
 :-------------------------:|:-------------------------:|:-------------------------:
 <img src="https://github.com/samliu000/FYP/blob/main/demoChoose.gif" width=250><br> |  <img src="https://github.com/samliu000/FYP/blob/main/demoStart.gif" width=250><br> | <img src="https://github.com/samliu000/FYP/blob/main/demoBan.gif" width=250><br>
 ### Collaborators
