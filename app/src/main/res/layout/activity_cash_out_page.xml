@@ -8,16 +8,6 @@
     android:background="@color/light_blue"
     tools:context=".CashOutPage">
 
-    <ImageView
-        android:id="@+id/appSelection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        app:srcCompat="@android:drawable/ic_menu_preferences" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,6 +49,18 @@
             android:background="@drawable/rounded_button_white"
             android:padding="8dp"
             android:text="Start"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/button_choose"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/rounded_button_white"
+            android:padding="8dp"
+            android:text="Choose Apps"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
