@@ -48,6 +48,7 @@ public class CashOutPage extends AppCompatActivity {
     private TextView text_view_countdown;
     private Button button_start_pause;
     private Button button_refresh;
+    private Button chooseButton;
     private CountDownTimer countdown_timer;
 
     private long startTimeInMillis;
@@ -85,7 +86,7 @@ public class CashOutPage extends AppCompatActivity {
         compName = new ComponentName(this, MyAdmin.class);
 
         // initialize buttons
-        appSelection = findViewById(R.id.appSelection);
+        chooseButton = findViewById(R.id.button_choose);
 
         // persistence initialization
         prefs = getSharedPreferences("prefs", MODE_PRIVATE);
@@ -103,7 +104,7 @@ public class CashOutPage extends AppCompatActivity {
 
 
         // move to app selection
-        appSelection.setOnClickListener(new View.OnClickListener() {
+        chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CashOutPage.this, AppSelect.class);
