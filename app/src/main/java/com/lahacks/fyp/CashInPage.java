@@ -24,6 +24,7 @@ public class CashInPage extends AppCompatActivity {
     private AlertDialog dialog;
 
     private int newMins; //This accumulates the minutes added by the user with each button
+    private int newWater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class CashInPage extends AppCompatActivity {
         waterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addWaterMinutesDialog();
+                newMins += addWaterMinutesDialog();
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
@@ -80,7 +81,7 @@ public class CashInPage extends AppCompatActivity {
         });
     }
 
-    public void addWaterMinutesDialog(){
+    public int addWaterMinutesDialog(){
 
         dialogBuilder = new AlertDialog.Builder(this);
         final View waterPopup = getLayoutInflater().inflate(R.layout.water_popup, null);
@@ -90,11 +91,13 @@ public class CashInPage extends AppCompatActivity {
 
         waterPopupButton = (Button) waterPopup.findViewById(R.id.waterPopupButton);
         waterPopupButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(CashInPage.this, "Cashed in water minutes!", Toast.LENGTH_SHORT).show();
-                newMins += 1;
+                newWater = 1;
             }
         });
+        return 1;
     }
 }
