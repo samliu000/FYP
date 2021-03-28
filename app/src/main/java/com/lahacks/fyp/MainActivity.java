@@ -42,33 +42,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        btNotification = findViewById(R.id.bt_notification);
-
-        /**if(time == 5 minutes || 1 minute){
-         *      send alarm
-         * }
-         */
-        btNotification.setOnClickListener(view -> {
-            Toast.makeText(this, "Reminder Set!", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-            long timeAtButtonClick = System.currentTimeMillis();
-            long tenSecondsInMillis = 1000 * 10;
-
-            //RTC_WAKEUP wakes up the device to fire the pending intent at the specified time
-            alarmManager.set(AlarmManager.RTC_WAKEUP,
-                    timeAtButtonClick +tenSecondsInMillis,
-                    pendingIntent);
-
-        });
-
-
-
         // attaching views
         cashOutButton = findViewById(R.id.cashOutButton);
         cashInButton = findViewById(R.id.cashInButton);
