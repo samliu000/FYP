@@ -56,22 +56,14 @@ public class CashInPage extends AppCompatActivity {
         prodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Testing purposes
-                Toast.makeText(CashInPage.this, "Productivity", Toast.LENGTH_SHORT).show();
-                //adds 5 minutes to newMins - temporary until user input is coded
-                newMins += addProdMinutesDialog();
-                cashOutIntent.putExtra("newMins", newMins);
+                addProdMinutesDialog();
             }
         });
 
         activityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Testing purposes
-                Toast.makeText(CashInPage.this, "Acitvity", Toast.LENGTH_SHORT).show();
-                //adds 10 minutes to newMins - temporary until user input is coded
-                newMins += addActivityMinutesDialog();
-                cashOutIntent.putExtra("newMins", newMins);
+                addActivityMinutesDialog();
             }
         });
 
@@ -122,7 +114,8 @@ public class CashInPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(CashInPage.this, "Cashed in productivity minutes!", Toast.LENGTH_SHORT).show();
-                newProd = 30;
+                newMins += 30;
+                cashOutIntent.putExtra("newMins", newMins);
             }
         });
         return 30;
@@ -142,7 +135,8 @@ public class CashInPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(CashInPage.this, "Cashed in activity minutes!", Toast.LENGTH_SHORT).show();
-                newActivity = 6;
+                newMins += 6;
+                cashOutIntent.putExtra("newMins", newMins);
             }
         });
         return 6;
