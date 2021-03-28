@@ -71,7 +71,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder>{
         public void bind(final App app) {
 
             // check if item is selected
-            if(selectedApps.contains(app.getName())) {
+            if(selectedApps.contains(app.getName()) || selectedApps.contains(app.getPackageName())) {
                 container.setBackgroundColor(Color.parseColor("#AFDCFF"));
             }
 
@@ -85,9 +85,10 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder>{
                 public void onClick(View v) {
 
                     // toggle between on and off by setting colors
-                    if(selectedApps.contains(app.getName())) {
+                    if(selectedApps.contains(app.getName()) || selectedApps.contains(app.getPackageName())) {
                         container.setBackgroundColor(0x00000000);
                         selectedApps.remove(appName.getText().toString());
+                        selectedApps.remove(app.getPackageName());
                     } else {
                         container.setBackgroundColor(Color.parseColor("#AFDCFF"));
                         selectedApps.add(appName.getText().toString());
