@@ -103,7 +103,6 @@ public class CashInPage extends AppCompatActivity {
                 cashOutIntent.putExtra("newMins", newMins);
             }
         });
-
     }
 
     public int addProdMinutesDialog(){

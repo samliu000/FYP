@@ -117,13 +117,12 @@ public class CashOutPage extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                // kill
+                // kill or pause timer
                 if(timerRunning) {
                     killApps();
                     pauseTimer();
                 }
-
-                // unkill
+                // unkill or startTimer
                 else {
                     unkillApps();
                     startTimer();
