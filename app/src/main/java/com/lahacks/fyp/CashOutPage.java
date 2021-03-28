@@ -271,6 +271,7 @@ public class CashOutPage extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void updateCountDownText() {
         int hours = (int) (timeLeftInMillis/1000) / 3600;
         int minutes = (int) ((timeLeftInMillis / 1000) % 3600) / 60;
@@ -305,9 +306,9 @@ public class CashOutPage extends AppCompatActivity {
             }
         }
 
-        if(minutes == 0){
-            createNotificationChannel0();
-            if(seconds==5){
+        if(minutes == 1){
+            createNotificationChannel1();
+            if(seconds==0){
                 long timeAtButtonClick = System.currentTimeMillis();
                 //RTC_WAKEUP wakes up the device to fire the pending intent at the specified time
                 alarmManager.set(AlarmManager.RTC_WAKEUP,
@@ -316,8 +317,29 @@ public class CashOutPage extends AppCompatActivity {
             }
         }
 
+
+        if(minutes == 0){
+            createNotificationChannel0();
+            if(seconds==5){
+                long timeAtButtonClick = System.currentTimeMillis();
+                //RTC_WAKEUP wakes up the device to fire the pending intent at the specified time
+                alarmManager.set(AlarmManager.RTC_WAKEUP,
+                        timeAtButtonClick,
+                        pendingIntent);
+
+                killApps();
+            }
+        }
+
+        if(minutes == 0){
+            createNotificationChannel0();
+            if(seconds==0){
+                killApps();
+            }
+        }
+
         String timeLeftFormatted;
-        if(hours > 0){
+        if(hours > 0) {
             timeLeftFormatted = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds);
         } else {
             timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
