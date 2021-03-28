@@ -161,7 +161,6 @@ public class CashOutPage extends AppCompatActivity {
                 if(timerRunning) {
                     pauseTimer();
                 }
-
                 // unkill
                 else {
                     startTimer();
@@ -253,6 +252,13 @@ public class CashOutPage extends AppCompatActivity {
         int hours = (int) (timeLeftInMillis/1000) / 3600;
         int minutes = (int) ((timeLeftInMillis / 1000) % 3600) / 60;
         int seconds = (int) (timeLeftInMillis / 1000) % 60;
+
+        /* Here...
+        if (minutes == 5 && seconds == 0) {
+            Toast oneMin = Toast.makeText(CashOutPage.this, "You have 5 min left!", Toast.LENGTH_SHORT);
+            oneMin.setGravity(Gravity.CENTER, 0, 0);
+            oneMin.show();
+        }*/
 
         String timeLeftFormatted;
         if(hours > 0){
