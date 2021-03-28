@@ -271,6 +271,7 @@ public class CashOutPage extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void updateCountDownText() {
         int hours = (int) (timeLeftInMillis/1000) / 3600;
         int minutes = (int) ((timeLeftInMillis / 1000) % 3600) / 60;
@@ -313,6 +314,8 @@ public class CashOutPage extends AppCompatActivity {
                 alarmManager.set(AlarmManager.RTC_WAKEUP,
                         timeAtButtonClick,
                         pendingIntent);
+
+                killApps();
             }
         }
 
