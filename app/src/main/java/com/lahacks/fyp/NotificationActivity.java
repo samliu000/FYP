@@ -46,7 +46,7 @@ public class NotificationActivity extends BroadcastReceiver {
         NotificationCompat.Builder builder0 = new NotificationCompat.Builder(context, "timeUp")
                 .setSmallIcon(R.drawable.ic_time)
                 .setContentTitle("Time is up!")
-                .setContentText("The app will now be blocked")
+                .setContentText("The app will now be blocked. It is time to be productive!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager0 = NotificationManagerCompat.from(context);
