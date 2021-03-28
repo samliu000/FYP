@@ -306,6 +306,18 @@ public class CashOutPage extends AppCompatActivity {
             }
         }
 
+        if(minutes == 1){
+            createNotificationChannel1();
+            if(seconds==0){
+                long timeAtButtonClick = System.currentTimeMillis();
+                //RTC_WAKEUP wakes up the device to fire the pending intent at the specified time
+                alarmManager.set(AlarmManager.RTC_WAKEUP,
+                        timeAtButtonClick,
+                        pendingIntent);
+            }
+        }
+
+
         if(minutes == 0){
             createNotificationChannel0();
             if(seconds==5){
@@ -319,8 +331,15 @@ public class CashOutPage extends AppCompatActivity {
             }
         }
 
+        if(minutes == 0){
+            createNotificationChannel0();
+            if(seconds==0){
+                killApps();
+            }
+        }
+
         String timeLeftFormatted;
-        if(hours > 0){
+        if(hours > 0) {
             timeLeftFormatted = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds);
         } else {
             timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
