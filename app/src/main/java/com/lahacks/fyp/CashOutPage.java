@@ -305,6 +305,17 @@ public class CashOutPage extends AppCompatActivity {
             }
         }
 
+        if(minutes == 0){
+            createNotificationChannel0();
+            if(seconds==5){
+                long timeAtButtonClick = System.currentTimeMillis();
+                //RTC_WAKEUP wakes up the device to fire the pending intent at the specified time
+                alarmManager.set(AlarmManager.RTC_WAKEUP,
+                        timeAtButtonClick,
+                        pendingIntent);
+            }
+        }
+
         String timeLeftFormatted;
         if(hours > 0){
             timeLeftFormatted = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds);
@@ -420,6 +431,19 @@ public class CashOutPage extends AppCompatActivity {
             String description = "Channel for Notification Reminder";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("notifyOneMinute", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+
+        }
+    }
+
+    private void createNotificationChannel0(){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            CharSequence name = "NotificationReminderChannel";
+            String description = "Channel for Notification Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("timeUp", name, importance);
             channel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
