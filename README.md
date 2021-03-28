@@ -24,6 +24,3 @@ Sign In            |  Walkthrough
 - Patriz Elaine Daroy
 - Samuel Liu
 
-## Open-source libraries used
-- [Firebase](https://firebase.google.com/) - User Authentication and Realtime Database provider
-- [Glide](https://github.com/bumptech/glide) - Image loading and caching library for Androids
